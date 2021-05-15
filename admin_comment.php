@@ -4,8 +4,8 @@ include("functions.php");
 check_session_id(); // idチェック関数の実行
 
 // 送信確認
-// var_dump($_POST);
-// exit();
+var_dump($_POST);
+exit();
 
 // 項目入力のチェック
 // 値が存在しないor空で送信されてきた場合はNGにする

@@ -39,6 +39,7 @@ if ($status == false) {
 <!DOCTYPE html>
 <html lang="ja">
 
+<div class="main">
 <head>
   <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -111,6 +112,11 @@ if ($status == false) {
                     <h2>ポイント</h2>
                     <textarea name="point" cols="50" rows="5" ><?= $record["point"]?></textarea>
                 </div>
+
+                <div class="pointbox">
+                    <h2>コメント</h2>
+                    <textarea name="comment" cols="50" rows="5" ><?= $record["comment"]?></textarea>
+                </div>
             </div>
 
                     <input type="hidden" name="id" value="<?= $record["id"]?>">
@@ -130,7 +136,7 @@ if ($status == false) {
 
 
 </body>
-
+</div>
 
 
 

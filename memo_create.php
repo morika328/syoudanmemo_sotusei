@@ -76,6 +76,8 @@
                     <h2>ポイント</h2>
                     <textarea name="point" cols="50" rows="5"></textarea>
                 </div>
+
+                
             </div>
 
             <div class="buttonarea">

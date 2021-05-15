@@ -21,12 +21,13 @@ $maker = $_POST['maker'];
 $how_long = $_POST['how_long'];
 $problem = $_POST['problem'];
 $point = $_POST['point'];
+$comment = $_POST['comment'];
 
 // DB接続
 $pdo = connect_to_db();
 
 // UPDATE文を作成&実行
-$sql = "UPDATE memo_table SET user_id=:user_id, customer_name=:customer_name,  interest=:interest, Dr=:Dr, DH=:DH, other=:other, maker=:maker, how_long=:how_long, problem=:problem, point=:point,updated_at=sysdate() WHERE id=:id";
+$sql = "UPDATE memo_table SET user_id=:user_id, customer_name=:customer_name,  interest=:interest, Dr=:Dr, DH=:DH, other=:other, maker=:maker, how_long=:how_long, problem=:problem, point=:point, comment=:comment, updated_at=sysdate() WHERE id=:id";
 
 $stmt = $pdo->prepare($sql);
 $stmt->bindValue(':id', $id, PDO::PARAM_INT);
@@ -40,6 +41,7 @@ $stmt->bindValue(':maker', $maker, PDO::PARAM_STR);
 $stmt->bindValue(':how_long', $how_long, PDO::PARAM_STR);
 $stmt->bindValue(':problem', $problem, PDO::PARAM_STR);
 $stmt->bindValue(':point', $point, PDO::PARAM_STR);
+// $stmt->bindValue(':comment', $comment, PDO::PARAM_STR);
 $status = $stmt->execute();
 
 // データ登録処理後

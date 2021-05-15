@@ -26,6 +26,8 @@ if ($status == false) {
   // 正常にSQLが実行された場合は入力ページファイルに移動し，入力ページの処理を実行する
   // fetchAll()関数でSQLで取得したレコードを配列で取得できる
   $result = $stmt->fetchAll(PDO::FETCH_ASSOC);  // データの出力用変数（初期値は空文字）を設定
+//   var_dump($result);
+//   exit();
   $memoData = json_encode($result);
   // $output = "";
   // // <tr><td>deadline</td><td>todo</td><tr>の形になるようにforeachで順番に$outputへデータを追加
@@ -72,75 +74,80 @@ if ($status == false) {
     <a href="memo_create.php">入力画面</a>
     <a href="todo_logout.php">ログアウト</a>
 
-<div class="main">
-  <div class="h1">
-                <h1>商談メモ</h1>
+    <div class="main">
+        <div class="h1">
+            <h1>商談メモ</h1>
+        </div>
+        <!-- 入力場所 -->
+        <dl class="dl1">
+            <div class="namearea">
+                <dt><label for="customer_name">医院名</label></dt>
+                <dd id='customer_name'></dd>
             </div>
-            <!-- 入力場所 -->
-
-            <dl class="dl1">
-                <div class="namearea">
-                    <dt><label for="customer_name">医院名</label></dt>
-                    <dd id='customer_name'></dd>
-                </div>
-                <div class="interestarea">
-                    <dt><label for="interest">問合せ内容(きっかけ)</label></dt>
-                    <dd id="interest"></dd>
-                </div>
-            </dl>
-
-            <div class="kihon">
-                <h2>基本情報</h2>
-                <div class="staff">
-                    <p>スタッフ</p>
-                    <div class="staffkind">
-                        <ul>
-                            <div class="list">
-                                <li class="Dr"> <label for="Dr">Dr</label>
-                                    <dd id="Dr"></dd>
-                                </li>
-                                <li class="DH"> <label for="DH">DH</label>
-                                    <dd id="DH"></dd>
-                                </li>
-                                <li class="other"> <label for="other">その他</label>
-                                    <dd id="other"></dd>
-                                </li>
-                            </div>
-                        </ul>
-                    </div>
+            <div class="interestarea">
+                <dt><label for="interest">問合せ内容(きっかけ)</label></dt>
+                <dd id="interest"></dd>
+            </div>
+        </dl>
+        <div class="kihon">
+            <h2>基本情報</h2>
+            <div class="staff">
+                <p>スタッフ</p>
+                <div class="staffkind">
+                    <ul>
+                        <div class="list">
+                            <li class="Dr"> <label for="Dr">Dr</label>
+                                <dd id="Dr"></dd>
+                            </li>
+                            <li class="DH"> <label for="DH">DH</label>
+                                <dd id="DH"></dd>
+                            </li>
+                            <li class="other"> <label for="other">その他</label>
+                                <dd id="other"></dd>
+                            </li>
+                        </div>
+                    </ul>
                 </div>
             </div>
-
-            <div class="system">
-                <h2>使用中システム</h2>
-                <ul>
-                    <div class="list">
-                        <li class="maker"> <label for="maker">メーカー</label>
-                            <dd id="maker"></dd>
-                        </li>
-                        <li class="how_long"> <label for="how_long">使用歴</label>
-                            <dd id="how_long"></dd>
-                        </li>
-                    </div>
-                </ul>
+        </div>
+        <div class="system">
+            <h2>使用中システム</h2>
+            <ul>
+                <div class="list">
+                    <li class="maker"> <label for="maker">メーカー</label>
+                        <dd id="maker"></dd>
+                    </li>
+                    <li class="how_long"> <label for="how_long">使用歴</label>
+                        <dd id="how_long"></dd>
+                    </li>
+                </div>
+            </ul>
+        </div>
+        <div class="problem_point">
+            <div class="problembox">
+                <h2>問題点</h2>
+                <dd id="problem" cols="50" rows="5"></dd>
+            </div>
+            <div class="pointbox">
+                <h2>ポイント</h2>
+                <dd id="point" cols="50" rows="5"></dd>
+            </div>
+            <div class="pointbox">
+                <h2>コメント</h2>
+                <dd id="comment" cols="50" rows="5"></dd>
             </div>
 
-            <div class="problem_point">
-                <div class="problembox">
-                    <h2>問題点</h2>
-                    <dd id="problem" cols="50" rows="5"></dd>
-                </div>
-
-                <div class="pointbox">
-                    <h2>ポイント</h2>
-                    <dd id="point" cols="50" rows="5"></dd>
-                </div>
-            </div>
-            <button type="button" id="back">前へ<button>
-            <button type="button" id="next">次へ<button>
-
-</div>
-  </fieldset>
+        </div>
+        <button type="button" id="back">前へ<button>
+        <button type="button" id="next">次へ<button>
+        <div id=edit_area>
+            <a id='edit' href="todo_edit.php?id=<?=$result[0]['id']?>">編集</a>
+        </div>
+        <!-- <div id="delete_are">            
+            <a href="todo_delete.php?id=<?=$result[0]['id']?>">削除</a>
+        </div>           -->
+    </div>
+</fieldset>
 
   <script>
   $(function(){
@@ -156,6 +163,7 @@ if ($status == false) {
           $('#how_long').text(memoData[cnt].how_long)
           $('#problem').text(memoData[cnt].problem)
           $('#point').text(memoData[cnt].point)
+          $('#comment').text(memoData[cnt].comment)
     $('#next').on('click',function(){
       cnt++
           $('#customer_name').text(memoData[cnt].customer_name);
@@ -167,6 +175,17 @@ if ($status == false) {
           $('#how_long').text(memoData[cnt].how_long)
           $('#problem').text(memoData[cnt].problem)
           $('#point').text(memoData[cnt].point)
+          $('#comment').text(memoData[cnt].comment)
+        //   console.log(memoData[cnt].id)
+        //   $("#edit_area").html(` <a href='todo_edit.php?id=${memoData[cnt].id}>編集</a>`)
+    })
+    $('#next').on('click','#edit_area',function(){
+        cnt++
+        $('#edit').remove();
+        const edit = ` <a href='todo_edit.php?id=${memoData[cnt].id}>編集</a>`;
+        console.log(edit)
+        $("#edit_area").html()
+
     })
     $('#back').on('click',function(){
       cnt--
@@ -179,7 +198,17 @@ if ($status == false) {
           $('#how_long').text(memoData[cnt].how_long)
           $('#problem').text(memoData[cnt].problem)
           $('#point').text(memoData[cnt].point)
-    })    
+          $('#comment').text(memoData[cnt].comment)
+        //    $("#edit_area").html(` <a href='todo_edit.php?id=${memoData[cnt].id}>編集</a>`)
+    })  
+    $('#back').on('click','#edit_area',function(){
+        cnt++
+        $('#edit').remove();
+        const edit = ` <a href='todo_edit.php?id=${memoData[cnt].id}>編集</a>`;
+        console.log(edit)
+        $("#edit_area").html()
+
+    })  
   })
   </script>
 </body>

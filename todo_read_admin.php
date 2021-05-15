@@ -71,6 +71,7 @@ if ($status == false) {
 
 <body>
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
   <fieldset>
     <legend>商談メモ（一覧画面）</legend>
@@ -140,6 +141,17 @@ if ($status == false) {
                     <h2>ポイント</h2>
                     <dd id="point" cols="50" rows="5"></dd>
                 </div>
+                
+            <form action="comment_create.php" method="POST">
+                <div class="commentbox">
+                    <h2>コメント</h2>
+                    <textarea type="text" name="comment" id="comment" cols="50" rows="5"></textarea>
+                </div>
+                <div>
+                    <button type="button" id="send">コメントを記載する</button>
+                </div>
+            </form>
+
             </div>
             <button type="button" id="back">前へ<button>
             <button type="button" id="next">次へ<button>
@@ -162,6 +174,8 @@ if ($status == false) {
           $('#how_long').text(memoData[cnt].how_long)
           $('#problem').text(memoData[cnt].problem)
           $('#point').text(memoData[cnt].point)
+          $('#comment').text(memoData[cnt].comment)
+          console.log(memoData[cnt].id)
     $('#next').on('click',function(){
       cnt++
           $('#customer_name').text(memoData[cnt].customer_name);
@@ -173,6 +187,7 @@ if ($status == false) {
           $('#how_long').text(memoData[cnt].how_long)
           $('#problem').text(memoData[cnt].problem)
           $('#point').text(memoData[cnt].point)
+          $('#comment').text(memoData[cnt].comment)
     })
     $('#back').on('click',function(){
       cnt--
@@ -185,8 +200,20 @@ if ($status == false) {
           $('#how_long').text(memoData[cnt].how_long)
           $('#problem').text(memoData[cnt].problem)
           $('#point').text(memoData[cnt].point)
-    })    
+          $('#comment').text(memoData[cnt].comment)
+    })  
+    $("#send").on("click", function(){
+        const comment = $('#comment').val()
+        const id = memoData[cnt].id
+      axios.get(`comment_create.php?id=${id}&comment=${comment}`)
+      .then(function (response) {
+        alert('コメントを送信しました')
+    })
+    })
+
   })
+
+
   </script>
 </body>
 
