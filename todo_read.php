@@ -9,7 +9,7 @@ $pdo = connect_to_db();
 $user_id = $_SESSION['user_id'];
 
 // データ取得SQL作成
-$sql = 'SELECT * FROM memo_table WHERE user_id = :user_id';
+$sql = 'SELECT * FROM memo_table WHERE user_id = :user_id AND is_deleted = 0 ';
 
 // SQL準備&実行
 $stmt = $pdo->prepare($sql);
@@ -68,6 +68,7 @@ if ($status == false) {
 
 <body>
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
   <fieldset>
     <legend>商談メモ（一覧画面）</legend>
@@ -77,16 +78,17 @@ if ($status == false) {
     <div class="main">
         <div class="h1">
             <h1>商談メモ</h1>
+            <p id="created_at"></p>
         </div>
         <!-- 入力場所 -->
         <dl class="dl1">
             <div class="namearea">
                 <dt><label for="customer_name">医院名</label></dt>
-                <dd id='customer_name'></dd>
+                <dd ><input type="text" id='customer_name'></dd>
             </div>
             <div class="interestarea">
                 <dt><label for="interest">問合せ内容(きっかけ)</label></dt>
-                <dd id="interest"></dd>
+                <dd><textarea cols="50" rows="5" type="text" id="interest"></textarea></dd>
             </div>
         </dl>
         <div class="kihon">
@@ -97,13 +99,13 @@ if ($status == false) {
                     <ul>
                         <div class="list">
                             <li class="Dr"> <label for="Dr">Dr</label>
-                                <dd id="Dr"></dd>
+                                <dd><input type="text" id="Dr"></dd>
                             </li>
                             <li class="DH"> <label for="DH">DH</label>
-                                <dd id="DH"></dd>
+                                <dd><input type="text" id="DH"></dd>
                             </li>
                             <li class="other"> <label for="other">その他</label>
-                                <dd id="other"></dd>
+                                <dd id="other"><input type="text" id="other"></dd>
                             </li>
                         </div>
                     </ul>
@@ -115,10 +117,10 @@ if ($status == false) {
             <ul>
                 <div class="list">
                     <li class="maker"> <label for="maker">メーカー</label>
-                        <dd id="maker"></dd>
+                        <dd><input type="text" id="maker"></dd>
                     </li>
                     <li class="how_long"> <label for="how_long">使用歴</label>
-                        <dd id="how_long"></dd>
+                        <dd><input type="text" id="how_long"></dd>
                     </li>
                 </div>
             </ul>
@@ -126,26 +128,25 @@ if ($status == false) {
         <div class="problem_point">
             <div class="problembox">
                 <h2>問題点</h2>
-                <dd id="problem" cols="50" rows="5"></dd>
+                <dd><textarea cols="30" rows="5" type="text" id="problem"></textarea></dd>
             </div>
             <div class="pointbox">
                 <h2>ポイント</h2>
-                <dd id="point" cols="50" rows="5"></dd>
+                <dd><textarea cols="30" rows="5" type="text" id="point"></textarea></dd>
             </div>
-            <div class="pointbox">
+            <div class="commentbox">
                 <h2>コメント</h2>
-                <dd id="comment" cols="50" rows="5"></dd>
+                <p id="comment"></p>
             </div>
 
         </div>
-        <button type="button" id="back">前へ<button>
-        <button type="button" id="next">次へ<button>
-        <div id=edit_area>
-            <a id='edit' href="todo_edit.php?id=<?=$result[0]['id']?>">編集</a>
+        <div class="button-area">
+            <button type="button" id="back">前へ</button>
+            <button type="button" id="next">次へ</button>
+            <button type="button" id="edit">上書き保存</button>
+            <button type="button" id="delete">削除</button>
         </div>
-        <!-- <div id="delete_are">            
-            <a href="todo_delete.php?id=<?=$result[0]['id']?>">削除</a>
-        </div>           -->
+        
     </div>
 </fieldset>
 
@@ -154,62 +155,101 @@ if ($status == false) {
     const memoData = <?=$memoData?>;
     let cnt = 0
      console.log(memoData)
-          $('#customer_name').text(memoData[cnt].customer_name);
-          $('#interest').text(memoData[cnt].interest)
-          $('#Dr').text(memoData[cnt].Dr)
-          $('#DH').text(memoData[cnt].DH)
-          $('#other').text(memoData[cnt].other)
-          $('#maker').text(memoData[cnt].maker)
-          $('#how_long').text(memoData[cnt].how_long)
-          $('#problem').text(memoData[cnt].problem)
-          $('#point').text(memoData[cnt].point)
+          $('#customer_name').val(memoData[cnt].customer_name);
+          $('#interest').val(memoData[cnt].interest)
+          $('#Dr').val(memoData[cnt].Dr)
+          $('#DH').val(memoData[cnt].DH)
+          $('#other').val(memoData[cnt].other)
+          $('#maker').val(memoData[cnt].maker)
+          $('#how_long').val(memoData[cnt].how_long)
+          $('#problem').val(memoData[cnt].problem)
+          $('#point').val(memoData[cnt].point)
           $('#comment').text(memoData[cnt].comment)
+          $('#created_at').text('作成日時：'+memoData[cnt].created_at)
     $('#next').on('click',function(){
       cnt++
-          $('#customer_name').text(memoData[cnt].customer_name);
-          $('#interest').text(memoData[cnt].interest)
-          $('#Dr').text(memoData[cnt].Dr)
-          $('#DH').text(memoData[cnt].DH)
-          $('#other').text(memoData[cnt].other)
-          $('#maker').text(memoData[cnt].maker)
-          $('#how_long').text(memoData[cnt].how_long)
-          $('#problem').text(memoData[cnt].problem)
-          $('#point').text(memoData[cnt].point)
+          $('#customer_name').val(memoData[cnt].customer_name);
+          $('#interest').val(memoData[cnt].interest)
+          $('#Dr').val(memoData[cnt].Dr)
+          $('#DH').val(memoData[cnt].DH)
+          $('#other').val(memoData[cnt].other)
+          $('#maker').val(memoData[cnt].maker)
+          $('#how_long').val(memoData[cnt].how_long)
+          $('#problem').val(memoData[cnt].problem)
+          $('#point').val(memoData[cnt].point)
           $('#comment').text(memoData[cnt].comment)
+          $('#created_at').text('作成日時：'+memoData[cnt].created_at)
         //   console.log(memoData[cnt].id)
-        //   $("#edit_area").html(` <a href='todo_edit.php?id=${memoData[cnt].id}>編集</a>`)
+        // $("#edit_area").html(` <a href='todo_edit.php?id=${memoData[cnt].id}>編集</a>`)
     })
-    $('#next').on('click','#edit_area',function(){
-        cnt++
-        $('#edit').remove();
-        const edit = ` <a href='todo_edit.php?id=${memoData[cnt].id}>編集</a>`;
-        console.log(edit)
-        $("#edit_area").html()
+    // $('#next').on('click','#edit_area',function(){
+    //     cnt++
+    //     $('#edit').remove();
+    //     const edit = ` <a href='todo_edit.php?id=${memoData[cnt].id}>編集</a>`;
+    //     console.log(edit)
+    //     $("#edit_area").html()
 
-    })
+    // })
     $('#back').on('click',function(){
       cnt--
-          $('#customer_name').text(memoData[cnt].customer_name);
-          $('#interest').text(memoData[cnt].interest)
-          $('#Dr').text(memoData[cnt].Dr)
-          $('#DH').text(memoData[cnt].DH)
-          $('#other').text(memoData[cnt].other)
-          $('#maker').text(memoData[cnt].maker)
-          $('#how_long').text(memoData[cnt].how_long)
-          $('#problem').text(memoData[cnt].problem)
-          $('#point').text(memoData[cnt].point)
+          $('#customer_name').val(memoData[cnt].customer_name);
+          $('#interest').val(memoData[cnt].interest)
+          $('#Dr').val(memoData[cnt].Dr)
+          $('#DH').val(memoData[cnt].DH)
+          $('#other').val(memoData[cnt].other)
+          $('#maker').val(memoData[cnt].maker)
+          $('#how_long').val(memoData[cnt].how_long)
+          $('#problem').val(memoData[cnt].problem)
+          $('#point').val(memoData[cnt].point)
           $('#comment').text(memoData[cnt].comment)
+          $('#created_at').text('作成日時：'+memoData[cnt].created_at)
         //    $("#edit_area").html(` <a href='todo_edit.php?id=${memoData[cnt].id}>編集</a>`)
     })  
-    $('#back').on('click','#edit_area',function(){
-        cnt++
-        $('#edit').remove();
-        const edit = ` <a href='todo_edit.php?id=${memoData[cnt].id}>編集</a>`;
-        console.log(edit)
-        $("#edit_area").html()
+    // $('#back').on('click','#edit_area',function(){
+    //     cnt++
+    //     $('#edit').remove();
+    //     const edit = ` <a href='todo_edit.php?id=${memoData[cnt].id}>編集</a>`;
+    //     console.log(edit)
+    //     $("#edit_area").html()
+    // })  
+    $("#delete").on("click", function(){
+        if(confirm('メモを削除しても良いですか？')){
+        const id = memoData[cnt].id
+      axios.get(`todo_delete.php?id=${id}`)
+      .then(function (response) {
+        alert('メモを削除しました')
+        location.reload();
+        })
+        }
+    })
+    $("#edit").on("click", function(){
+        if(confirm('メモを上書きしても良いですか？')){
+            const postData = new URLSearchParams();
+            postData.append('customer_name',$('#customer_name').val())
+            postData.append('interest',$('#interest').val())
+            postData.append('Dr',$('#Dr').val())
+            postData.append('DH',$('#DH').val())
+            postData.append('other',$('#other').val())
+            postData.append('maker',$('#maker').val())
+            postData.append('how_long',$('#how_long').val())
+            postData.append('problem',$('#problem').val())
+            postData.append('point',$('#point').val())
+            postData.append('id',memoData[cnt].id)
 
-    })  
-  })
+        axios.post("todo_edit.php",postData,{
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+        })
+      .then(function (response) {
+          //console.log(response)
+        alert('メモを編集しました')
+        location.reload();
+        })
+        }
+    })
+
+
+    })
+
   </script>
 </body>
 

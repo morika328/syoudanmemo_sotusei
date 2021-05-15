@@ -67,7 +67,7 @@ width: 50px;
     padding-left: 50px;
 }
 
-.sonota{
+.commentbox{
     padding-left: 50px;
 }
 
@@ -105,4 +105,8 @@ justify-content: center;
 
 .open{
     justify-content: center;
+}
+.button-area{
+    display: flex;
+    justify-content: space-around;
 }

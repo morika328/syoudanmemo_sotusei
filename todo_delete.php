@@ -15,7 +15,7 @@ $id = $_GET["id"];
 $pdo = connect_to_db();
 
 // DELETE文を作成&実行
-$sql = "DELETE FROM memo_table WHERE id=:id";
+$sql = "UPDATE memo_table SET is_deleted=1 WHERE id=:id";
 
 $stmt = $pdo->prepare($sql);
 $stmt->bindValue(':id', $id, PDO::PARAM_INT);

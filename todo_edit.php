@@ -1,25 +1,39 @@
 <?php
 // 送信データのチェック
-// var_dump($_GET);
-// exit();
-
-
 
 // 関数ファイルの読み込み
 session_start();
 include("functions.php");
 check_session_id(); // idチェック関数の実行
 
-$id = $_GET["id"];
+$id = $_POST["id"];
+$customer_name = $_POST["customer_name"];
+$interest = $_POST["interest"];
+$Dr = $_POST["Dr"];
+$DH = $_POST["DH"];
+$other = $_POST["other"];
+$maker = $_POST["maker"];
+$how_long = $_POST["how_long"];
+$problem = $_POST["problem"];
+$point = $_POST["point"];
 
 $pdo = connect_to_db();
 
 // データ取得SQL作成
-$sql = 'SELECT * FROM memo_table WHERE id=:id';
+$sql = 'UPDATE memo_table SET customer_name=:customer_name,interest=:interest,Dr=:Dr,DH=:DH,other=:other,maker=:maker,how_long=:how_long,problem=:problem,point=:point,updated_at=sysdate() WHERE id=:id';
 
 // SQL準備&実行
 $stmt = $pdo->prepare($sql);
-$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->bindValue(':id', $id, PDO::PARAM_STR);
+$stmt->bindValue(':customer_name', $customer_name, PDO::PARAM_STR);
+$stmt->bindValue(':interest', $interest, PDO::PARAM_STR);
+$stmt->bindValue(':DH', $DH, PDO::PARAM_STR);
+$stmt->bindValue(':Dr', $Dr, PDO::PARAM_STR);
+$stmt->bindValue(':other', $other, PDO::PARAM_STR);
+$stmt->bindValue(':maker', $maker, PDO::PARAM_STR);
+$stmt->bindValue(':how_long', $how_long, PDO::PARAM_STR);
+$stmt->bindValue(':problem', $problem, PDO::PARAM_STR);
+$stmt->bindValue(':point', $point, PDO::PARAM_STR);
 $status = $stmt->execute();
 
 // データ登録処理後
@@ -31,7 +45,6 @@ if ($status == false) {
 } else {
   // 正常にSQLが実行された場合は指定の11レコードを取得
   // fetch()関数でSQLで取得したレコードを取得できる
-  $record = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
 ?>

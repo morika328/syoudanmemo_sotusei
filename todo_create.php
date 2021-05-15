@@ -29,14 +29,13 @@ $maker = $_POST['maker'];
 $how_long = $_POST['how_long'];
 $problem = $_POST['problem'];
 $point = $_POST['point'];
-$comment = $_POST['comment'];
 
 // DB接続
 $pdo = connect_to_db();
 
 // データ登録SQL作成
 // `created_at`と`updated_at`には実行時の`sysdate()`関数を用いて実行時の日時を入力する
-$sql = 'INSERT INTO memo_table(id, user_id,customer_name, interest, Dr, DH, other, maker, how_long, problem, point, comment, created_at, updated_at, is_deleted) VALUES(NULL, :user_id, :customer_name, :interest, :Dr, :DH, :other, :maker,  :how_long, :problem, :point, :comment,sysdate(), sysdate(), 0)';
+$sql = 'INSERT INTO memo_table(id, user_id,customer_name, interest, Dr, DH, other, maker, how_long, problem, point, created_at, updated_at, is_deleted) VALUES(NULL, :user_id, :customer_name, :interest, :Dr, :DH, :other, :maker,  :how_long, :problem, :point,sysdate(), sysdate(), 0)';
 
 // SQL準備&実行
 $stmt = $pdo->prepare($sql);
@@ -50,7 +49,6 @@ $stmt->bindValue(':maker', $maker, PDO::PARAM_STR);
 $stmt->bindValue(':how_long', $how_long, PDO::PARAM_STR);
 $stmt->bindValue(':problem', $problem, PDO::PARAM_STR);
 $stmt->bindValue(':point', $point, PDO::PARAM_STR);
-$stmt->bindValue(':comment', $comment, PDO::PARAM_STR);
 $status = $stmt->execute();
 
 // データ登録処理後

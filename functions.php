@@ -18,12 +18,13 @@ function connect_to_db()
 {
   // DB接続の設定
   // DB名は`gsacf_x00_00`にする
-  $dbn = 'mysql:dbname=be6a39d5aa58b9fb3984d3afb1e7b01c;charset=utf8;port=3306;host=mysql-2.mc.lolipop.lan';
-  // $user = 'root';
-  // $pwd = '';
+  // $dbn = 'mysql:dbname=be6a39d5aa58b9fb3984d3afb1e7b01c;charset=utf8;port=3306;host=mysql-2.mc.lolipop.lan';
+ $dbn = 'mysql:dbname=final_product;charset=utf8;port=3306;host=localhost';
+  $user = 'root';
+  $pwd = '';
 
-  $user = 'be6a39d5aa58b9fb3984d3afb1e7b01c';
-  $pwd = 'Morika328@gmail';
+  // $user = 'be6a39d5aa58b9fb3984d3afb1e7b01c';
+  // $pwd = 'Morika328@gmail';
 
   try {
     // ここでDB接続処理を実行する

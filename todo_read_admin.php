@@ -81,6 +81,7 @@ if ($status == false) {
 <div class="main">
   <div class="h1">
                 <h1>商談メモ</h1>
+                <p id="created_at"></p>
             </div>
             <!-- 入力場所 -->
 
@@ -142,19 +143,17 @@ if ($status == false) {
                     <dd id="point" cols="50" rows="5"></dd>
                 </div>
                 
-            <form action="comment_create.php" method="POST">
                 <div class="commentbox">
                     <h2>コメント</h2>
                     <textarea type="text" name="comment" id="comment" cols="50" rows="5"></textarea>
                 </div>
-                <div>
-                    <button type="button" id="send">コメントを記載する</button>
-                </div>
-            </form>
 
             </div>
-            <button type="button" id="back">前へ<button>
-            <button type="button" id="next">次へ<button>
+        <div class="button-area">
+            <button type="button" id="back">前へ</button>
+            <button type="button" id="next">次へ</button>
+            <button type="button" id="send">コメントを記載する</button>
+        </div>
             
 
 </div>
@@ -175,6 +174,7 @@ if ($status == false) {
           $('#problem').text(memoData[cnt].problem)
           $('#point').text(memoData[cnt].point)
           $('#comment').text(memoData[cnt].comment)
+          $('#created_at').text('作成日時：'+memoData[cnt].created_at)
           console.log(memoData[cnt].id)
     $('#next').on('click',function(){
       cnt++
@@ -188,6 +188,7 @@ if ($status == false) {
           $('#problem').text(memoData[cnt].problem)
           $('#point').text(memoData[cnt].point)
           $('#comment').text(memoData[cnt].comment)
+          $('#created_at').text('作成日時：'+memoData[cnt].created_at)
     })
     $('#back').on('click',function(){
       cnt--
@@ -201,6 +202,7 @@ if ($status == false) {
           $('#problem').text(memoData[cnt].problem)
           $('#point').text(memoData[cnt].point)
           $('#comment').text(memoData[cnt].comment)
+          $('#created_at').text('作成日時：'+memoData[cnt].created_at)
     })  
     $("#send").on("click", function(){
         const comment = $('#comment').val()
